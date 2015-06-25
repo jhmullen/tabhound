@@ -5,6 +5,8 @@
   "description": "An extension to open tabs at specified times",
   "version": "1.0",
 
+  "options_page": "options.html",
+
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html",
