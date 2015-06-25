@@ -4,6 +4,7 @@
   "name": "Tabhound",
   "description": "An extension to open tabs at specified times",
   "version": "1.0",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
 
   "options_page": "options.html",
 

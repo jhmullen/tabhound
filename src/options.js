@@ -1,5 +1,5 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  $('#timeselect').timepicker();
+  jQuery('#datetimepicker').datetimepicker();
 });
