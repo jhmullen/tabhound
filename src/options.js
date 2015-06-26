@@ -4,27 +4,42 @@ function insertPicker() {
   jQuery('#datetimepicker').datetimepicker();
 }
 
+function updateList(newList) {
+  var ul = document.getElementById('ul');
+    ul.innerHTML = '';
+    for (var i = 0; i < newList.length; i++) {
+      var item = document.createElement('li');
+      item.appendChild(document.createTextNode(newList[i]));
+      ul.appendChild(item);
+    }
+  document.getElementById('list').appendChild(ul);
+}
+
 function save_options() {
   var opt = document.getElementById('opt').value;
-  chrome.storage.sync.set({
-    myOpt: opt
-  }, function() {
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 1500);
+  chrome.storage.sync.get({
+    myList: []
+  }, function(items) {
+    var listFromStorage = items.myList;
+    listFromStorage.push(opt);
+    chrome.storage.sync.set({
+      myList: listFromStorage
+    }, function() {
+      updateList(listFromStorage);
+      var status = document.getElementById('status');
+      status.textContent = 'Options saved.';
+      setTimeout(function() {
+        status.textContent = '';
+      }, 1500);
+    });
   });
 }
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
 function restore_options() {
-  // Use default value color = 'red' and likesColor = true.
   chrome.storage.sync.get({
-    myOpt: 'default'
+    myList: []
   }, function(items) {
-    document.getElementById('opt').value = items.myOpt;
+    updateList(items.myList);
   });
 }
 
