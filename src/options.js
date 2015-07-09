@@ -1,5 +1,6 @@
 
 
+
 function insertPicker() {
   jQuery('#datetimepicker').datetimepicker();
 }
@@ -64,6 +65,10 @@ function save_options() {
       myList: listFromStorage
     }, function() {
       refreshList(listFromStorage);
+      var opt = document.getElementById('opt');
+      opt.value = "";
+      opt.focus();
+
       var status = document.getElementById('status');
       status.textContent = 'Options saved.';
       setTimeout(function() {
@@ -82,7 +87,12 @@ function restore_options() {
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click',
-    save_options);
-
+document.getElementById('save').addEventListener('click', save_options);
 document.addEventListener('DOMContentLoaded', insertPicker);
+document.getElementById('opt').addEventListener('click', function() {this.select();});
+
+document.onkeydown=function(){
+    if(window.event.keyCode=='13' && document.getElementById('opt').value != ""){
+        save_options();
+    }
+}
