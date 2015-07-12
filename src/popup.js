@@ -18,7 +18,18 @@ function renderStatus(statusText) {
 }
 
 function passLinkToOptions() {
-  chrome.runtime.openOptionsPage();
+  chrome.storage.sync.get({
+    myTabs: []
+  }, function(items) {
+    var tabsFromStorage = items.myTabs;
+    var epoch = String((new Date).getTime());
+    tabsFromStorage.push(epoch);
+    chrome.storage.sync.set({
+      myTabs: tabsFromStorage
+    }, function() {
+      chrome.runtime.openOptionsPage();
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function() {

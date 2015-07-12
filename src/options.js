@@ -2,6 +2,11 @@
 
 //---------- UI Functions -------------
 
+$(window).focus(function() {
+   console.log('welcome (back)');
+   restoreTabs();
+});
+
 function insertPicker() {
   jQuery('#datetimepicker').datetimepicker();
 }
@@ -25,8 +30,13 @@ function initializePage() {
   document.addEventListener('DOMContentLoaded', insertPicker);
   document.getElementById('save').addEventListener('click', saveTabs);
   document.getElementById('opt').addEventListener('click', function() {this.select();});
+  document.getElementById('clearall').onclick = function () { 
+    chrome.storage.sync.clear(function() {
+      restoreTabs();
+    });
+  };
   document.onkeydown=function(){
-    if(window.event.keyCode=='13' && document.getElementById('opt').value != ""){
+    if(window.event.keyCode=='13'){
       saveTabs();
     }
   }
@@ -37,10 +47,12 @@ function initializePage() {
 //---------- Tab Management -----------
 
 function removeTab(tab) {
+  console.log('trying to remove' + tab);
   chrome.storage.sync.get({
     myTabs: []
   }, function(items) {
     var tabsFromStorage = items.myTabs;
+    console.log(tabsFromStorage);
     var index = tabsFromStorage.indexOf(tab);
     if (index > -1) {
       tabsFromStorage.splice(index, 1);
@@ -84,19 +96,23 @@ function buildList(newList) {
 
 function saveTabs() {
   var opt = document.getElementById('opt').value;
-  chrome.storage.sync.get({
-    myTabs: []
-  }, function(items) {
-    var tabsFromStorage = items.myTabs;
-    tabsFromStorage.push(opt);
-    chrome.storage.sync.set({
-      myTabs: tabsFromStorage
-    }, function() {
-      buildList(tabsFromStorage);
-      clearTextFieldInput();
-      showStatus('Options saved.');
+  if (opt != "") {
+    chrome.storage.sync.get({
+      myTabs: []
+    }, function(items) {
+      var tabsFromStorage = items.myTabs;
+      tabsFromStorage.push(opt);
+      chrome.storage.sync.set({
+        myTabs: tabsFromStorage
+      }, function() {
+        buildList(tabsFromStorage);
+        clearTextFieldInput();
+        showStatus('Options saved.');
+      });
     });
-  });
+  } else {
+    showStatus('Cannot add blank');
+  }
 }
 
 function restoreTabs() {
