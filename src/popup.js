@@ -28,8 +28,13 @@ function renderStatus(statusText) {
   document.getElementById('status').textContent = statusText;
 }
 
+function passLinkToOptions() {
+  chrome.runtime.openOptionsPage();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  getCurrentTabUrl(function(url) {
+  /*getCurrentTabUrl(function(url) {
     document.getElementById("myurl").innerHTML = url
-  });
+  });*/
+  document.getElementById("savelink").onclick = passLinkToOptions;
 });
