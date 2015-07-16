@@ -73,9 +73,9 @@ function buildListItem(tab) {
   var deleteText = document.createTextNode('[x]');
   var deleteLink = document.createElement('a');
   deleteLink.setAttribute('href', '#');
-  deleteLink.setAttribute('id', "del_" + tab);
+  deleteLink.setAttribute('id', "del___" + tab);
   deleteLink.appendChild(deleteText);
-  deleteLink.onclick = function () { removeTab(this.getAttribute('id').split('_')[1]); };
+  deleteLink.onclick = function () { removeTab(this.getAttribute('id').split('___')[1]); };
   listItem.appendChild(deleteLink);
   return listItem;
 }
@@ -83,7 +83,7 @@ function buildListItem(tab) {
 function buildList(newList) {
   var ul = document.getElementById('ul');
   ul.innerHTML = '';
-  for (var i = 0; i < newList.length; i++) {
+  for (var i = newList.length - 1; i >= 0 ; i--) {
     var tab = newList[i];
     listItem = buildListItem(tab);
     ul.appendChild(listItem);
